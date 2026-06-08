@@ -1,0 +1,93 @@
+;===========================================
+; KFM SF6 - DRIVE SYSTEM (SAFE VERSION)
+;===========================================
+
+;-------------------------------------------
+; CONSTANTES (por enquanto hardcoded)
+;-------------------------------------------
+
+[State -2, Drive Init Max]
+type = VarSet
+trigger1 = RoundState = 0
+v = 50
+value = 6000
+
+[State -2, Drive Init Current]
+type = VarSet
+trigger1 = RoundState = 0
+v = 51
+value = 6000
+
+[State -2, Drive Init Burnout]
+type = VarSet
+trigger1 = RoundState = 0
+v = 52
+value = 0
+
+;-------------------------------------------
+; REGEN / BURNOUT (POR ENQUANTO SÓ LÓGICA SIMPLES)
+;-------------------------------------------
+
+[State -2, Drive Regen]
+type = VarAdd
+trigger1 = RoundState = 2
+trigger1 = GameTime % 4 = 0
+v = 51
+value = 8
+
+[State -2, Clamp Max]
+type = VarSet
+trigger1 = var(51) > var(50)
+v = 51
+value = var(50)
+
+;-------------------------------------------
+; DEBUG OPCIONAL
+;-------------------------------------------
+
+[State -3, Debug Drive]
+type = PrintToConsole
+trigger1 = GameTime % 30 = 0
+text = "DRIVE=%d MAX=%d"
+params = var(51), var(50)
+
+;-------------------------------------------
+; DRIVE PARRY (SEM DRIVE CHECK POR ENQUANTO)
+;-------------------------------------------
+
+[Statedef 7000]
+type = S
+movetype = I
+physics = S
+anim = 0
+sprpriority = 2
+ctrl = 0
+
+; Custo inicial (só mexe em var)
+[State 7000, Startup Cost]
+type = VarAdd
+trigger1 = Time = 0
+v = 51
+value = -500
+
+; Custo contínuo
+[State 7000, Hold Cost]
+type = VarAdd
+trigger1 = Time > 0
+trigger1 = GameTime % 3 = 0
+v = 51
+value = -20
+
+; Placeholder defensivo
+[State 7000, GuardLike]
+type = NotHitBy
+trigger1 = Time >= 0
+value = SCA
+time = 1
+
+; Saída temporizada
+[State 7000, Timed End]
+type = ChangeState
+trigger1 = Time >= 12
+value = 0
+ctrl = 1

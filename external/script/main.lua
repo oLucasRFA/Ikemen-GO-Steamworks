@@ -1990,22 +1990,60 @@ main.t_itemname = {
 		end
 		return nil
 	end,
-	--SERVER HOST
-	['serverhost'] = function(t, item)
-		local doneSnd = motif[main.group].cursor.done.snd.serverhost or motif[main.group].cursor.done.snd.default
-		sndPlay(motif.Snd, doneSnd[1], doneSnd[2])
-		hook.run("main.t_itemname", t, item)
-		if main.f_connect("", gameOption('Netplay.ListenPort')) then
-			if synchronize() then
-				enterSyncedNetplayMenu()
-			end
-			replayStop()
-			exitNetPlay()
-			exitReplay()
-			showSessionWarning()
-		end
-		return nil
-	end,
+['serverhost'] = function(t, item)
+    -- Se for o item do Steam Lobby → Host Lobby
+    if t[item].itemname == 'menunetwork.steamlobby.host' then
+        -- Muda o texto do título na tela para testar
+        textImgSetText(
+            motif.select_info.title.TextSpriteData,
+            "Lobby criado: aguardando oponente"
+        )
+        -- Aqui chamamos o Go para criar o lobby pela Steam
+        SteamCreateLobby()
+        -- Por enquanto, não abre conexão TCP, só sai da função
+        return nil
+    end
+
+    -- Caso contrário, é o HOST GAME normal (Direct Connect), segue o código antigo:
+    local doneSnd = motif[main.group].cursor.done.snd.serverhost or motif[main.group].cursor.done.snd.default
+    sndPlay(motif.Snd, doneSnd[1], doneSnd[2])
+    hook.run("main.t_itemname", t, item)
+    if main.f_connect("", gameOption('Netplay.ListenPort')) then
+        if synchronize() then
+            enterSyncedNetplayMenu()
+        end
+        replayStop()
+        exitNetPlay()
+        exitReplay()
+        showSessionWarning()
+    end
+    return nil
+end,
+	    -- STEAM HOST LOBBY
+    ['steamhost'] = function(t, item)
+        local doneSnd = motif[main.group].cursor.done.snd.serverhost or motif[main.group].cursor.done.snd.default
+        sndPlay(motif.Snd, doneSnd[1], doneSnd[2])
+        hook.run("main.t_itemname", t, item)
+
+        -- Aqui você marca modo Steam no Go e pede pra criar o lobby.
+        -- Por enquanto, só chama a função Go via binding:
+        SteamCreateLobby()
+
+        -- TODO depois: entrar numa tela "Lobby criado: aguardando oponente"
+        -- Por agora, só volta pro menu.
+        return nil
+    end,
+
+    -- STEAM JOIN LOBBY (placeholder)
+    ['steamjoin'] = function(t, item)
+        local doneSnd = motif[main.group].cursor.done.snd.serverconnect or motif[main.group].cursor.done.snd.default
+        sndPlay(motif.Snd, doneSnd[1], doneSnd[2])
+        hook.run("main.t_itemname", t, item)
+
+        -- No futuro: abrir lista de lobbies ou depender só de convite Steam.
+        -- Por enquanto não faz nada especial.
+        return nil
+    end,
 	--STORY MODE ARC
 	['storyarc'] = function(t, item)
 		main.motif.continuescreen = true
@@ -2306,6 +2344,8 @@ main.t_itemname = {
 }
 main.t_itemname.teamarcade = main.t_itemname.arcade
 main.t_itemname.teamversus = main.t_itemname.versus
+main.t_itemname.menunetwork.steamlobby.host = main.t_itemname.steamhost
+main.t_itemname.menunetwork.steamlobby.join = main.t_itemname.steamjoin
 if gameOption('Debug.DumpLuaTables') then main.f_printTable(main.t_itemname, 'debug/t_mainItemname.txt') end
 
 function main.f_deleteIP(item, t)

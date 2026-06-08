@@ -56,6 +56,15 @@ func closeLog(f *os.File) {
 }
 
 func main() {
+	if !InitSteam() {
+		fmt.Println("Rodando sem Steam (InitSteam falhou)")
+	} else {
+		fmt.Println("Steam inicializado com sucesso")
+
+		ok := SteamCreateLobby()
+		fmt.Println("SteamCreateLobby retornou:", ok)
+	}
+	defer ShutdownSteam()
 	realMain()
 }
 

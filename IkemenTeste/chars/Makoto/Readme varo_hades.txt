@@ -1,0 +1,277 @@
+;***************************************************************************;
+;*********************** Makoto 1.3 by KojiroBADNESS ***********************;
+;***************************************************************************;
+;***************************************************************************;
+
+*=================================*
+    <|Updates by varo_hades|>
+*=================================*
+-Effects of Pots like super combos effects lvl1,lvl2 and lvl3
+-Hitsparks of Pots gamplay (orange for all moves)
+-Sounds of Pots gameplay
+-Just supers lvl1 and lvl2 for almost supers and the only lvl3 is Hayate no Red Hawk 
+-Zero Counter
+-New Portrait and Win portrait
+-Changed some functions of custom combo
+-Super finish effects including the hyper fonts
+-Changed the color of the hyper portrait
+-New super lvl1 of Rikujou Gekiha Ken
+
+And I remember that's all.
+Special thanks to my friend Hades for make the hyper finish fonts.
+And check the moveset in site down.
+
+*=================================*
+           <|Updates|>
+*=================================*
+
+UPDATE 06/09/15 (1.2)
+
+- Added Run > Roll.
+- Hayate no Red Hawk bug is fixed.
+- C.Hard Punch can no longer be blocked while standing.
+- Fixed Abare Tosanami/Ex special bug.
+- Fukiage priorites changed.
+- Fixed Flashing Tanden Renki bug.
+- Slightly retweeked comboing system.
+
+UPDATE 06/09/15 (1.2)
+
+- EX Fukiage can can now grounded opponents.
+- Specials can no longer be Air Tech'd.
+- Fixed Tanden Renki (Red Skin) bug.
+- Damage slightly nerfed MAX Abare Tosanami, Damage increased for Hayate no Red Hawk.
+- Changed comboing priorities on all specials. 
+- Adjusted Abare Tosanami functionality.
+- Tanden Renki no longer builds meter.
+- Added both SF3/SF4 Tanden Renki EX Special Functionalities.
+
+UPDATE 31/08/15 (1.1)
+
+- Removed MP/MK Infinites.
+- Added Cornerpush to basic attacks.
+- EX Tsurugi is slightly buffed.
+- Fixed LK position issue.
+- Adjusted Custom Combo effect.
+- Made corrections to errors in readme.
+
+
+*=================================*
+           <|Features|>
+*=================================*
+
+- A CVS-Like/SF3 gameplay mechanic!
+
+*=================================*
+       <|History/Fun Facts|>
+*=================================*
+
+<|*HISTORY*|>
+
+- Makoto was started on July.4th/2012
+
+<|*FUN FACTS*|>
+
+- Makoto watched One Piece and has taken a page out of Monkey D. Luffy's journey.
+  Being so facinated by Luffy's Gomu Gomu no Red Hawk, she turned her signature Hayate
+  and developed Hayate no Red Hawk.
+
+*=================================*
+        <|Basic Controls|>
+*=================================*
+
+      x     = Weak Punch
+      y     = Medium Punch
+      z     = Strong Punch
+      a     = Weak Kick
+      b     = Medium Kick
+      c     = Strong Kick
+      Start = Taunt  
+
+
+*=================================*
+    <|Movelist Translations|>
+*=================================*
+
+      U     = Up
+      D     = Down
+      F     = Forward
+      B     = Back
+      S     = Start
+      p     = Any Punch
+      2p    = 2 Punches
+      k     = Any Kick
+      2k    = 2 Kicks
+
+(Air) - Move must be performed in the air.
+
+(EX) - Skills with an Alternate version. EX Skills are performed by pressing two punch/kick buttons.
+Example: Hayate - D, DB, B, p
+         EX Hayate - D, DB, B, 2p
+
+EX Skills will cost half of a power stock.
+            
+
+*=================================*
+            <|System|>
+*=================================*
+
+      Dash:                     F, F
+      Run:                      F, F (Hold)
+      Back Dash:                B, B
+      Long Jump:                D, U
+      Low Jump:                 (Tap) U
+      Side Step:                a+x 
+      Side Step /w Punch:       a+x, p 
+      Side Step /w Kick:        a+x, k 
+      Forward Dodge Roll:       F+a+x
+      Backward Dodge Roll:      B+a+x
+      Parry High:               (Tap) F
+      Parry Low:                (Tap) D
+      Air Parry:                (Tap) F (Air)
+      Power Charge:             b+y  (Hold)
+      Custom Combo:             c+z *Requires 1 Power Stock*
+      Roll Recovery:            2p or 2k
+      Aerial Recovery:          2p or 2k (Air)
+
+
+*=================================*
+            <|Skills|>
+*=================================*
+
+<|*NORMALS*|>
+
+- Headbutt:				   B/F+2p (Near Opponent)
+- Triple Threat:			   B/F+2k (Near Opponent)
+- Shibuki:                                 F+a
+- Naruto:                                  F+b
+- Kuroshio:                                F+c
+- Kuroshio Faint:                          F+c (Hold)
+- Kazami:                                  F+x
+- Kaoruna:                                 F+y
+- Shimaki:                                 F+z
+- Shimaki, Yamase:                         F+z, z
+- Target Combo 1:                          a, b  
+- Target Combo 2:                          F+b, c
+- Target Combo 3:                          F+x, z
+
+<|**SPECIALS**|>
+
+- Hayate:                                  D, DF, F + p (Hold)
+     .Hayate Faint:                          k (During Hayate Charge)
+     .Hayate Taunt:                          S (After Hayate)
+- Hayate (EX):                             D, DF, F + 2p
+- Fukiage:                                 F, D, DF + p
+- Fukiage (EX):                            F, D, DF + 2p
+- Oroshi:                                  D, DB, B + p
+- Oroshi (EX):                             D, DB, B + 2p
+- Tsurugi:                                 D, DB, B + k (Air)
+- Tsurugi (EX):                            D, DB, B + 2k (Air)
+- Karakusa:                                F, DF, D, DB, B + k
+- Karakusa (EX):                           F, DF, D, DB, B + 2k
+
+<|***SUPERS***|>
+
+LEVEL 1
+- Seichuzen Godanzuki:                     D, DF, F, D, DF, F + x (or y,z)
+- Abare Tosanami:                          D, DF, F, D, DF, F + a (or b,c)
+        .Short Range:                        a
+        .Mid Range:                          b
+        .Long Range:                         c
+- Tanden Renki:                            D, DB, B, D, DB, B + x (or y,z)
+- Rikujou Gekiha Ken: 			   D, D, D + p (Hold) 
+
+LEVEL 2
+- Medium Seichuzen Godanzuki:              D, DF, F, D, DF, F + y (or z)
+- Medium Abare Tosanami:                   D, DF, F, D, DF, F + b (or c)
+        .Short Range:                        a
+        .Mid Range:                          b
+        .Long Range:                         c
+- Medium Tanden Renki:                     D, DB, B, D, DB, B + y (or z)
+- Rikujou Gekiha Ken: 			   D, D, D + p (Hold) 
+
+LEVEL 3
+- Hayate no Red Hawk:			   D, DB, B, D, DF, F + 2p
+
+<|*OTHERS*|> 
+
+- Extend Taunt:                            S (Hold)
+- 2nd Taunt:				   B + S
+
+*=================================*
+        <|Special Thanks|>
+*=================================*
+
+Folks:
+¯¯¯¯¯¯
+NHK - Allowing your projects to be open source. Even though I never got to speak with you personally, I still give you a lot of thanks and praise.
+Fid0 - Same as NHK, I gotta give you credit for your custom sprites. And used a some of your coding. For that I am thankful to you!
+Immortal SyN - Giving me A LOT of support, coding tips, and beta testing. You've made things a lot easier for me. Thank you very much for your help, bruh!
+NoZ - Did me a big favor and drew me an incredible small portrait!
+Kamekaze - Giving reliable feedback, coding material, and challenging me to high res all of my effects. Thanks!
+P.O.T.S - For allowing me to use some of your effects.
+Vyn - Allowing me to use your Power charge images and coding, along with a few other resourses. Thanks a lot man, big ups to you!
+Senorfro - Put in hard work and color separated the majority of Makoto's sprites. Thanks!
+Drex - Helped out with Makoto's color separation and finished the remaining sprites (amazingly fast). Thank you very much!
+
+Inspirational creators:
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Reu (R.I.P) - Evil Ryu and Evil Ken are what dragged many into MUGEN. In my case, I stopped getting DBZ characters, and started playing with Capcom/SNK/Etc characters.
+Fervicante - Wouldn't have gotten far or inspired without your characters, especially Fuuma.
+Immortal SyN - I wouldn't be calling CSX my internet home if it wasn't for your bad ass interactive stages. Not to mention taking me in as an Adminstrator. You've helped me tons along the way.
+Warusaki3 - Making great CVS characters. Very inspirational.
+P.O.T.S - Your way of making characters accuracte is phenomenal. Some of the best stuff I've seen since Reu.
+Vyn - Your effects were beautiful. I was always attracted to your characters because of originallity.
+LaQuak - Til this day, I am still impressed with how well Mai-Ling was done. Not to mention you've been a good friend to me.
+H' - Like Warusaki3, I never liked CVS2 character conversions until I tried your stuff.
+Alexlexus - Helping you improve Gouken is what mostly got me into coding more. Learned a lot along the way for it!
+Rei & Gal23 - You guys also make good CVS characters which grew on me fairly quick.
+N64Mario - You unintentionally got me started in coding with your Omega Zero and also had amazing characters.
+DivineWolf - Seeing you as an awesome Creator has been nothing short of phenomenal. Very inspirational to keep me going.
+Infinite - Same as DivineWolf. You too have improved a lot throughout the years, put in hard work, and have been good friends of mine.
+
+
+Communities:
+¯¯¯¯¯¯¯¯¯¯ 
+Club Syndicate Xtreme
+Mugen Guild
+Infinity Mugen Team
+Street Mugen (R.I.P)
+
+Companies:
+¯¯¯¯¯¯¯¯¯¯
+Capcom - For creating Makoto, making CVS2, and many other great games.
+
+Movies & TV Series' & Audio?! (This is important why?):
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Jojo's Bizarre Adventure
+Friday the Animated Series
+Power Stone
+Legend of the Seeker (TV Series)
+Joe Rogan Podcast
+DashieGames
+
+All for keeping me VERY entertained while aligning sprites, working on animations, etc!
+
+
+*=================================*
+         <|Known Issues|>
+*=================================*
+
+None at the moment...
+
+*=================================*
+        <|Future Updates|>
+*=================================*
+
+None at the moment...
+
+*=================================*
+        <|Final Comments|>
+*=================================*
+
+Lastly, this character is NOT open source. A lot of sprites I've used, do not belong to me. I've used
+many other creators effects and some coding for which I've been respectfully granted permission to use by
+each and every one of them listed above. If you wish to use my sourCes, inform me and/or ask one of them.
+
+Enjoy!! ;D

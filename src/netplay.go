@@ -30,6 +30,12 @@ const (
 	replayMagic                = "IKRPLCFG"
 )
 
+type NetTransport interface {
+	Read(b []byte) (int, error)
+	Write(b []byte) (int, error)
+	Close() error
+}
+
 type NetState int
 
 const (
@@ -38,6 +44,13 @@ const (
 	NS_End
 	NS_Stopped
 	NS_Error
+)
+
+type NetMode int
+
+const (
+	NetModeDirectIP NetMode = iota
+	NetModeSteam
 )
 
 type SyncScope string
@@ -156,8 +169,10 @@ func (nb *NetBuffer) readNetBufferAnalog() [6]int8 {
 
 // NetConnection manages the communication between players
 type NetConnection struct {
-	ln               *net.TCPListener
-	conn             *net.TCPConn
+	ln   *net.TCPListener
+	conn NetTransport
+	mode NetMode
+
 	st               NetState
 	sendEnd          chan bool
 	recvEnd          chan bool

@@ -1,0 +1,10 @@
+^C:\USERS\ADMIN\IKEMEN-GO-STEAMWORKS\IKEMENSTEAMBRIDGE\BUILD\CMAKEFILES\1535E1386D2E1484294C54090A472481\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/Admin/Ikemen-GO-Steamworks/IkemenSteamBridge -BC:/Users/Admin/Ikemen-GO-Steamworks/IkemenSteamBridge/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Admin/Ikemen-GO-Steamworks/IkemenSteamBridge/build/IkemenSteamBridge.slnx
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
