@@ -1,0 +1,134 @@
+
+# Documentação do Projeto — Ikemen-GO-Steamworks
+
+> Snapshot gerado em 11/09/2026 antes de pausar o desenvolvimento e formatar a máquina.
+> Caminho local do projeto: `C:\Users\Admin\Ikemen-GO-Steamworks`
+
+## 1. Objetivo do Projeto
+
+Integrar o motor **Ikemen GO** (fork em Go do M.U.G.E.N.) com a **Steamworks SDK**, permitindo:
+
+- Criação de lobby/host de partidas via Steam (matchmaking).
+- Listagem e entrada (join) em lobbies existentes pela Steam.
+- Comunicação entre o binário Go (`Ikemen_GO.exe`) e a API C++ da Steam através de uma DLL ponte (bridge).
+
+## 2. Estrutura Real do Projeto (raiz)
+
+Baseado na listagem `tree /F` gerada localmente, ignorando pastas de terceiros (FFmpeg fonte/binários, assets de personagens `IkemenTeste\`, editor Fighter Factory `FFS Portable...`, que não fazem parte do código de integração):
+
+```
+C:\Users\Admin\Ikemen-GO-Steamworks
+│   go.mod / go.sum
+│   Ikemen_GO.exe
+│   Makefile / README.md / BUILDING.md / CONTRIBUTING.md
+│
+├───src\                        # Código-fonte principal do Ikemen GO (Go)
+│   │   main.go                 # Entry point do jogo
+│   │   system.go               # Núcleo do sistema/game loop
+│   │   netplay.go              # Networking rollback / netplay original do Ikemen
+│   │   steam_integration.go    # Camada de integração com a Steam (Go)
+│   │   steam_lobby.go          # Bindings Go -> DLL da Steam (lobby, host, join)
+│   │   ... (demais arquivos originais do engine: render, audio, input, etc.)
+│
+├───steamhost_dll\               # DLL ponte (bridge) C++ <-> Steamworks
+│       steam_host.cpp           # Código-fonte da bridge (exporta funções para o Go)
+│       steam_host.dll           # Binário compilado da bridge
+│
+├───steamtest\                   # Executável de teste isolado (fora do Ikemen)
+│       main.cpp                 # Testa chamadas da Steam API isoladamente
+│       steamtest.exe
+│       steam_api64.dll
+│       steam_appid.txt
+│
+├───IkemenSteamBridge\           # Projeto alternativo/paralelo em CMake (Visual Studio)
+│       IkemenSteamBridge.cpp
+│       CMakeLists.txt
+│       build\                   # Artefatos de build (IkemenSteamBridge.dll, .lib, .exp)
+│
+├───external\
+│   ├───steamworks\sdk\          # Steamworks SDK oficial (headers isteam*.h, libs win32/win64)
+│   ├───mods\lconsole.lua        # Mod/console Lua customizado
+│   └───script\
+│           main.lua             # Menu/lógica Lua principal (customizado para Steam)
+│           menu.lua             # Menu customizado (opções de lobby Steam)
+│           default.lua / options.lua / start.lua / debug.lua
+│
+├───lib\                         # DLLs runtime (FFmpeg, SDL2, etc. — dependências padrão do Ikemen)
+├───data\ font\ save\            # Assets padrão do Ikemen GO
+└───estrutura.txt / estrutura2.txt  # Snapshots de estrutura gerados durante este processo
+```
+
+## 3. Componentes Desenvolvidos/Modificados
+
+### 3.1 `steamhost_dll/steam_host.cpp` → `steam_host.dll`
+DLL C++ que encapsula chamadas da Steamworks SDK e as expõe como funções `extern "C"` para o Go via `syscall`/`cgo`. Principais responsabilidades:
+
+- Inicialização da Steam API (`SteamAPI_Init`).
+- Criação de lobby (host).
+- Listagem de lobbies (`SH_GetLobbyList`).
+- Função de teste simples (`SH_TestInt`) usada para validar se o carregamento da DLL e o marshalling de tipos entre Go e C++ estão corretos.
+- Sistema de log em arquivo (`LogToFile`) para depuração, já que não há console visível em builds de release.
+
+### 3.2 `src/steam_lobby.go`
+Camada Go que carrega a DLL (`syscall.NewLazyDLL` / `syscall.NewProc`) e expõe wrappers idiomáticos para o resto do engine, como `SteamListLobbiesGo`, `SteamCreateLobbyGo`. Passou por múltiplas iterações (`steam_lobby.go` → `steam_lobby-2.go`) para:
+
+- Corrigir assinatura de chamadas (ponteiros, callbacks).
+- Ajustar ordem de carregamento da DLL em relação à inicialização da Steam API.
+- Adicionar tratamento de erros e logs (`steam_debug.log`, `steam_host.log`).
+
+### 3.3 `src/steam_integration.go`
+Camada de integração que conecta o fluxo de lobby Steam ao restante do `system.go` (estado do jogo, menu, netplay).
+
+### 3.4 `src/system.go` / `src/main.go`
+Modificados para inicializar a integração Steam no boot do jogo e expor os hooks necessários para o menu Lua acionar host/join.
+
+### 3.5 `external/script/main.lua` e `menu.lua`
+Scripts Lua do menu principal, estendidos com opções de UI para "Hospedar Partida (Steam)" e "Buscar Partidas (Steam)", chamando as funções expostas pelo `steam_integration.go`.
+
+### 3.6 `steamtest/` (projeto de teste isolado)
+Executável C++ standalone (`main.cpp` → `steamtest.exe`) usado para testar chamadas da Steamworks API **fora** do contexto do Ikemen GO, isolando se um bug é do motor ou da própria integração com a Steam.
+
+### 3.7 `IkemenSteamBridge/` (linha de investigação alternativa)
+Projeto CMake/Visual Studio criado como abordagem alternativa de bridge, compilando `IkemenSteamBridge.dll` via MSVC (em vez do toolchain original usado para `steam_host.dll`). Foi usado para testar se o problema de crash no join era relacionado ao compilador/toolchain (MinGW vs MSVC) usado para gerar a DLL.
+
+## 4. Status Atual (ao pausar o desenvolvimento)
+
+| Funcionalidade | Status | Observações |
+|---|---|---|
+| Inicialização da Steam API | ✅ Funciona | `SteamAPI_Init` retorna sucesso, logs confirmam. |
+| Host de lobby | ✅ Funciona | Criação de lobby e listagem básica funcionam corretamente. |
+| `SH_TestInt` (chamada de teste simples) | ✅ Funciona | Confirma que o marshalling básico Go↔DLL está correto. |
+| Join em lobby (`SH_GetLobbyList` + entrada) | ❌ Crash | O jogo trava/crasha ao tentar listar/entrar em lobbies existentes, mesmo com `SH_TestInt` funcionando. |
+
+### Hipóteses já investigadas para o crash do Join
+- Diferença de toolchain (MinGW vs MSVC) na compilação da DLL — testado via `IkemenSteamBridge` (MSVC/CMake) sem solução definitiva confirmada.
+- Ordem de carregamento entre `steam_api64.dll` e a DLL bridge (`steam_host.dll`).
+- Possível problema de marshalling de estruturas mais complexas (listas de lobby) versus tipos primitivos simples (`int` do `SH_TestInt`).
+- Duplicação/conflito de DLLs Steam carregadas simultaneamente (bridge + SDK) — mencionado nas investigações mas não confirmado como causa raiz.
+
+## 5. Logs e Artefatos de Depuração
+
+Durante o processo, foram gerados logs recorrentes para diagnóstico:
+
+- `steam_debug.log` — log geral de debug da integração.
+- `steam_host.log` / `steam_host-2.log` — logs específicos da DLL bridge (`LogToFile`).
+
+Esses arquivos devem ser preservados junto do backup, pois documentam o comportamento exato no momento das falhas de join.
+
+## 6. Próximos Passos (ao retomar)
+
+1. Retomar a partir da hipótese de toolchain: comparar binário gerado por `IkemenSteamBridge` (MSVC) chamando `SH_GetLobbyList` equivalente, isolando se o crash persiste.
+2. Adicionar mais logs (`LogToFile`) especificamente antes/depois de cada chamada dentro de `SH_GetLobbyList` no `steam_host.cpp`, para identificar a linha exata do crash.
+3. Testar a listagem de lobby isoladamente no `steamtest.exe` (fora do Ikemen GO), replicando exatamente a chamada usada pelo `steam_lobby.go`.
+4. Confirmar se `SteamAPI_RunCallbacks()` está sendo chamado corretamente no loop de jogo — falha comum é lobby list depender de callbacks assíncronos não processados a tempo.
+5. Validar a versão do Steamworks SDK usada em `external/steamworks/sdk` contra a versão da `steam_api64.dll` distribuída em `steamtest/` e `steamhost_dll/`.
+
+## 7. Backup — Checklist antes da formatação
+
+- [ ] Fazer backup completo da pasta `C:\Users\Admin\Ikemen-GO-Steamworks` (ideal: `git init` + commit, se ainda não versionado).
+- [ ] Preservar `steam_debug.log`, `steam_host-2.log` e este `DOCUMENTACAO.md`.
+- [ ] Preservar `IkemenSteamBridge\` (projeto CMake alternativo) e `steamtest\` (projeto de teste isolado).
+- [ ] Confirmar que `external\steamworks\sdk` está incluído no commit (ou documentado como dependência externa a ser baixada de novo, caso `.gitignore` a exclua).
+
+---
+*Documento gerado para consolidar o histórico de desenvolvimento antes da suspensão do trabalho e formatação da máquina.*

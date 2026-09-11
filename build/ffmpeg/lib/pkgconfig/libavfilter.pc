@@ -1,0 +1,14 @@
+prefix=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg
+exec_prefix=${prefix}
+libdir=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg/lib
+includedir=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 10.5.100
+Requires: 
+Requires.private: libswscale >= 8.3.100, libavutil >= 59.39.100
+Conflicts:
+Libs: -L${libdir}  -lavfilter 
+Libs.private: -lm -latomic
+Cflags: -I${includedir}

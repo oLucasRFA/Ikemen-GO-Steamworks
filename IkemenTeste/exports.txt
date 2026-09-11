@@ -1,0 +1,53 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36246.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file steam_host.dll
+
+File Type: DLL
+
+  Section contains the following exports for steam_host.dll
+
+    00000000 characteristics
+    6A2E07B5 time date stamp Sat Jun 13 22:45:25 2026
+        0.00 version
+           1 ordinal base
+          12 number of functions
+          12 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00001A5B SH_CreateLobby
+          2    1 00001862 SH_GetLobbyByIndex
+          3    2 00001845 SH_GetLobbyCount
+          4    3 00001C9C SH_GetLobbyList
+          5    4 00001BDD SH_GetLobbyMemberCount
+          6    5 000019AE SH_Init
+          7    6 000018C1 SH_JoinLobby
+          8    7 00001B77 SH_LeaveLobby
+          9    8 0000172B SH_RequestLobbyList
+         10    9 00001A33 SH_RunCallbacks
+         11    A 00001A04 SH_Shutdown
+         12    B 00001C4B SH_TestInt
+
+  Summary
+
+        3000 .bss
+        1000 .data
+        2000 .debug_abbrev
+        1000 .debug_aranges
+        1000 .debug_frame
+        9000 .debug_info
+        2000 .debug_line
+        2000 .debug_line_str
+        2000 .debug_loclists
+        1000 .debug_rnglists
+        1000 .debug_str
+        1000 .edata
+        1000 .idata
+        1000 .pdata
+        2000 .rdata
+        1000 .reloc
+        5000 .text
+        1000 .tls
+        1000 .xdata

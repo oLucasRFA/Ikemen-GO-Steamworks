@@ -1765,6 +1765,135 @@ main.t_itemname = {
 		hook.run("main.t_itemname", t, item)
 		return main.f_demoStart
 	end,
+	-- STEAM LOBBY: host via Steam
+    ['hostgame'] = function(t, item)
+    -- 1) Criar lobby via Steamworks
+    -- Essas funções são placeholders; você vai expor elas da sua bridge C/Go.
+    local created = false
+    local lobbyId = nil
+
+    if SteamCreateLobby then
+        -- Exemplo: SteamCreateLobby(maxPlayers) -> lobbyId ou nil
+        lobbyId = SteamCreateLobby(2)
+        created = lobbyId ~= nil
+    end
+
+    if not created then
+        -- Falhou criar o lobby
+        main.f_warning(
+            "Falha ao criar Steam Lobby.\nVerifique se o Steam está aberto.",
+            motif[main.group],
+            motif[main.background],
+            motif.warning_info.overlay.RectData,
+            motif.warning_info.title.TextSpriteData,
+            motif.warning_info.text.TextSpriteData
+        )
+        return
+    end
+
+    -- Guarda o estado globalmente, para o loop do lobby poder saber o que fazer
+    main.steamLobby = {
+        mode = 'host',
+        lobbyId = lobbyId,
+        guestJoined = false,
+        cancelled = false,
+    }
+
+    -- 2) Tela de "Lobby criado, aguardando oponente"
+    -- Aqui fazemos um loop simples de UI até:
+    -- - alguém entrar (Steam sinaliza), ou
+    -- - o jogador cancelar (ESC), ou
+    -- - timeout, se você quiser.
+    local info = motif.title_info  -- podemos reaproveitar o grupo de título
+    while true do
+        if esc() or getInput(-1, info.menu.cancel.key) then
+            -- Jogador cancelou: fecha lobby e volta ao menu
+            if SteamCloseLobby and main.steamLobby and main.steamLobby.lobbyId then
+                SteamCloseLobby(main.steamLobby.lobbyId)
+            end
+            main.steamLobby.cancelled = true
+            break
+        end
+
+        -- Aqui você precisa de algum polling/callback para saber se o guest entrou.
+        -- Exemplo de polling:
+        if SteamLobbyHasGuest and SteamLobbyHasGuest(main.steamLobby.lobbyId) then
+            main.steamLobby.guestJoined = true
+            break
+        end
+
+        -- Desenhar tela de “aguardando oponente”
+        clearColor(motif[main.background].bgclearcolor[1], motif[main.background].bgclearcolor[2], motif[main.background].bgclearcolor[3])
+        bgDraw(motif[main.background].BGDef, 0)
+
+        rectDraw(info.connecting.overlay.RectData)
+        local txt = "Steam Lobby criado.\nAguardando oponente entrar..."
+        textImgReset(info.connecting.TextSpriteData)
+        textImgSetText(info.connecting.TextSpriteData, txt)
+        textImgDraw(info.connecting.TextSpriteData)
+
+        bgDraw(motif[main.background].BGDef, 1)
+        refresh()
+    end
+
+    -- Saiu do loop: ou guest entrou, ou cancelou
+    if not main.steamLobby.guestJoined then
+        -- Só voltou pro menu, nada mais a fazer
+        return
+    end
+
+    -- 3) Guest entrou: seguir pro fluxo normal de netplay host
+    -- A ideia é reaproveitar o mesmo que hoje o "HOST GAME" de Direct Connect faz.
+    -- Procura na main.lua o handler do 'serverhost' e chama a mesma lógica aqui.
+    if main.t_itemname['serverhost'] ~= nil then
+        main.t_itemname['serverhost'](t, item)
+    else
+        -- fallback simples, caso não ache
+        main.f_warning(
+            "Steam Lobby: guest conectado.\n(Implementar integração com serverhost aqui)",
+            motif[main.group],
+            motif[main.background],
+            motif.warning_info.overlay.RectData,
+            motif.warning_info.title.TextSpriteData,
+            motif.warning_info.text.TextSpriteData
+        )
+    end
+end,
+
+    -- STEAM LOBBY: join via Steam
+    ['joingame'] = function(t, item)
+    local lobbies = SteamListLobbies()
+  		if not lobbies or #lobbies == 0 then
+    	print("Nenhum lobby Steam encontrado.")
+    	return
+  end
+
+    -- Montar lista de nomes para menu
+    local tlobbyNames = {}
+ 	for i, lobby in ipairs(lobbies) do
+	local nome = lobby.ownerName or lobby.name or "Lobby"
+    tlobbyNames[i] = "Sala de " .. nome
+  	end
+
+    -- Usar um menu interno do Ikemen para escolher um lobby
+      local idx = main.f_menuSimple(tlobbyNames, "Escolha um lobby")
+  		if not idx or not lobbies[idx] then
+    return
+  end
+
+    local lobbyId = lobbies[idx].id
+
+    if SteamJoinLobby and SteamJoinLobby(lobbyId) then
+        -- Aqui, join bem sucedido: cai no fluxo netplay normal (serverjoin)
+        if main.t_itemname['serverjoin'] ~= nil then
+            main.steamLobby = main.steamLobby or {}
+            main.steamLobby.lobbyId = lobbyId
+            main.t_itemname['serverjoin'](t, item)
+        end
+    else
+        main.print("Falha ao entrar no lobby Steam selecionado.")
+    end
+end,
 	--FREE BATTLE (QUICK VS)
 	['freebattle'] = function(t, item)
 		--main.fightscreen.p1score = true

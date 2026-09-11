@@ -1,0 +1,2 @@
+2026/06/13 23:10:00 steam_lobby.go:39: loadSteamHostDLL: steam_host.dll carregada
+2026/06/13 23:10:00 steam_lobby.go:161: SteamListLobbiesGo: SH_TestInt(123) returned 124 (err=Cannot create a file when that file already exists.)

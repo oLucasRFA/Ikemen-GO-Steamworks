@@ -1,0 +1,14 @@
+prefix=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg
+exec_prefix=${prefix}
+libdir=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg/lib
+includedir=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 59.39.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil 
+Libs.private: -lm -luser32 -lbcrypt -latomic
+Cflags: -I${includedir}

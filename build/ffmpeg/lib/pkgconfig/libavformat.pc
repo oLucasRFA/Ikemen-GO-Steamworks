@@ -1,0 +1,14 @@
+prefix=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg
+exec_prefix=${prefix}
+libdir=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg/lib
+includedir=/c/Users/Admin/Ikemen-GO-Steamworks/build/ffmpeg/include
+
+Name: libavformat
+Description: FFmpeg container format library
+Version: 61.7.103
+Requires: 
+Requires.private: libavcodec >= 61.19.101, libswresample >= 5.3.100, libavutil >= 59.39.100
+Conflicts:
+Libs: -L${libdir}  -lavformat 
+Libs.private: -lm -lws2_32 -latomic
+Cflags: -I${includedir}

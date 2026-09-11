@@ -1,0 +1,34 @@
+Version: nightly
+Build Time: 2026.06.13
+Platform: windows (amd64)
+OpenGL 3.3
+RAM in Use: 127 MB / OS Reserved: 215 MB
+Active Goroutines: 3
+Timestamp: 2026-06-13 18:33:16
+
+Engine error
+
+Error: external/script/main.lua:896: attempt to index a non-table object(nil) with key 'menu'
+stack traceback:
+	external/script/main.lua:896: in function 'f_warning'
+	external/script/main.lua:1871: in function <external/script/main.lua:1864>
+	external/script/main.lua:2652: in function 'loop'
+	external/script/main.lua:2636: in function 'loop'
+	external/script/main.lua:2636: in function 'loop'
+	external/script/main.lua:3860: in main chunk
+	[G]: ?
+
+Go stack traceback:
+goroutine 1 [running, locked to thread]:
+runtime/debug.Stack()
+	runtime/debug/stack.go:26 +0x5e
+main.handlePanic({0x7ff6f33b7d60, 0x1616b6225240})
+	github.com/ikemen-engine/Ikemen-GO/src/main.go:378 +0x385
+main.realMain.func1()
+	github.com/ikemen-engine/Ikemen-GO/src/main.go:82 +0x1d
+panic({0x7ff6f33b7d60?, 0x1616b6225240?})
+	runtime/panic.go:860 +0x13a
+main.realMain()
+	github.com/ikemen-engine/Ikemen-GO/src/main.go:222 +0x55e
+main.main()
+	github.com/ikemen-engine/Ikemen-GO/src/main.go:75 +0x16b

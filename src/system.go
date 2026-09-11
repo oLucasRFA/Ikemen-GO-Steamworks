@@ -468,6 +468,7 @@ func (s *System) init(w, h int32) *lua.LState {
 	l := lua.NewState()
 	l.Options.IncludeGoStackTrace = true
 	l.OpenLibs()
+	registerSteamLobbyFuncs(l)
 	s.resetRemapInput()
 	for i := range s.stringPool {
 		s.stringPool[i] = *NewStringPool()
@@ -5791,6 +5792,67 @@ func (s *System) cleanCustomShaders() {
 			}
 		}
 	}
+}
+
+// --- STEAM LOBBY → Funções expostas pro Lua ---
+
+func registerSteamLobbyFuncs(L *lua.LState) {
+	L.SetGlobal("SteamCreateLobby", L.NewFunction(luaSteamCreateLobby))
+	L.SetGlobal("SteamCloseLobby", L.NewFunction(luaSteamCloseLobby))
+	L.SetGlobal("SteamLobbyHasGuest", L.NewFunction(luaSteamLobbyHasGuest))
+	// JOIN
+	L.SetGlobal("SteamListLobbies", L.NewFunction(luaSteamListLobbies))
+	L.SetGlobal("SteamJoinLobby", L.NewFunction(luaSteamJoinLobby))
+}
+
+func luaSteamListLobbies(L *lua.LState) int {
+	lobbies, _ := SteamListLobbiesGo()
+	tbl := L.NewTable()
+
+	if lobbies != nil {
+		for i, lob := range lobbies {
+			idx := i + 1
+			entry := L.NewTable()
+			entry.RawSetString("id", lua.LNumber(lob.ID))
+			entry.RawSetString("ownerName", lua.LString(lob.OwnerName))
+			tbl.RawSetInt(idx, entry)
+		}
+	}
+
+	L.Push(tbl)
+	return 1
+}
+
+func luaSteamJoinLobby(L *lua.LState) int {
+	lobbyId := L.CheckInt64(1)
+	ok := SteamJoinLobbyGo(uint64(lobbyId))
+	L.Push(lua.LBool(ok))
+	return 1
+}
+
+func luaSteamCreateLobby(L *lua.LState) int {
+	maxPlayers := L.CheckInt(1)
+
+	// Chama a função Go que você vai definir em steam_lobby.go
+	id, err := SteamCreateLobbyGo(maxPlayers)
+	if err != nil || id == 0 {
+		L.Push(lua.LNil)
+		return 1
+	}
+
+	L.Push(lua.LNumber(id))
+	return 1
+}
+
+func luaSteamCloseLobby(L *lua.LState) int {
+	SteamCloseLobbyGo()
+	return 0
+}
+
+func luaSteamLobbyHasGuest(L *lua.LState) int {
+	has := SteamLobbyHasGuestGo()
+	L.Push(lua.LBool(has))
+	return 1
 }
 
 func (s *System) shouldHideWithBars() bool {

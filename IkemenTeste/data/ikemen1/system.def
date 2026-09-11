@@ -209,23 +209,22 @@ menu.itemname.storymode.back = BACK
 
 ; Submenu: Network
 menu.itemname.menunetwork = NETWORK
-menu.itemname.menunetwork.direct = DIRECT CONNECT
 menu.itemname.menunetwork.steamlobby = STEAM LOBBY
+menu.itemname.menunetwork.directconnect = DIRECT CONNECT
 menu.itemname.menunetwork.back = BACK
 
-; Submenu: Network => Direct Connect (TCP)
-menu.itemname.menunetwork.direct.serverhost = HOST GAME
-menu.itemname.menunetwork.direct.serverjoin = JOIN GAME
-menu.itemname.menunetwork.direct.back = BACK
+; Submenu: Network => Steam Lobby
+menu.itemname.menunetwork.steamlobby.hostgame = HOST GAME
+menu.itemname.menunetwork.steamlobby.joingame = JOIN GAME
+menu.itemname.menunetwork.steamlobby.back = BACK
+
+; Submenu: Network => Direct Connect
+menu.itemname.menunetwork.directconnect.serverhost = HOST GAME
+menu.itemname.menunetwork.directconnect.serverjoin = JOIN GAME
 
 ; known IP addresses show up before serverjoin.back item
-menu.itemname.menunetwork.direct.serverjoin.joinadd = NEW ADDRESS
-menu.itemname.menunetwork.direct.serverjoin.back = BACK
-
-; Submenu: Network => Steam Lobby
-menu.itemname.menunetwork.steamlobby.host = HOST LOBBY
-menu.itemname.menunetwork.steamlobby.join = JOIN LOBBY
-menu.itemname.menunetwork.steamlobby.back = BACK
+menu.itemname.menunetwork.directconnect.serverjoin.joinadd = NEW ADDRESS
+menu.itemname.menunetwork.directconnect.serverjoin.back = BACK
 
 ; This group is hidden and should not be moved to other menus.
 ; It's opened automatically, after synchronization with online player.

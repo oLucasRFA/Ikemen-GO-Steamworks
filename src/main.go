@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -56,15 +57,21 @@ func closeLog(f *os.File) {
 }
 
 func main() {
+	// Abrir/criar arquivo de log na pasta atual
+	f, err := os.OpenFile("steam_debug.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err == nil {
+		log.SetOutput(f)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		defer f.Close()
+	}
+
 	if !InitSteam() {
 		fmt.Println("Rodando sem Steam (InitSteam falhou)")
 	} else {
 		fmt.Println("Steam inicializado com sucesso")
-
-		ok := SteamCreateLobby()
-		fmt.Println("SteamCreateLobby retornou:", ok)
+		defer ShutdownSteam()
 	}
-	defer ShutdownSteam()
+
 	realMain()
 }
 

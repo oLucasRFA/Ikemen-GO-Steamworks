@@ -15,6 +15,7 @@ require (
 	github.com/leonkasovan/gl v0.0.0-20251110213347-e04040ce71e2
 	github.com/lukegb/dds v0.0.0-20190402175749-8b7170e64003
 	github.com/qmuntal/gltf v0.24.2
+	github.com/silbinarywolf/steamworks v1.0.0
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
